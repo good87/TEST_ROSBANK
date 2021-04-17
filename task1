@@ -24,7 +24,7 @@
   #Create a new user with sudo privileges
 - name: Create a new regular user with sudo privileges
   user:
-  name: "{{ create_user }}"
+  name: AP_user
   state: present
   groups: application
   append: true

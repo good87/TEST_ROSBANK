@@ -1,0 +1,32 @@
+---
+  # Hosts file create before this script
+- hosts: all
+  become: true
+  
+  #updates install
+  tasks:
+ - name: check updates
+   apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
+  #add sudo group
+ - name: add sudo group application
+   group:
+   name: application
+   state: present
+
+- name: remove application group from admin
+   lineinfile:
+   path: /etc/sudoers
+   state: present
+   regexp: '^%application'
+   line: '%application ALL=(ALL) NOPASSWD: ALL'
+   validate: '/usr/sbin/visudo -cf %s'
+
+  #Create a new user with sudo privileges
+- name: Create a new regular user with sudo privileges
+  user:
+  name: "{{ create_user }}"
+  state: present
+  groups: application
+  append: true
+  create_home: true
+  shell: /bin/bash

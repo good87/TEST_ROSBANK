@@ -39,9 +39,24 @@ services:
      - "node1:192.168.1.3"
      - "node2:192.168.1.4"
 
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=rosbank
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    extra_hosts:
+     - "node1:192.168.1.3"
+     - "node2:192.168.1.4"
+
 networks:
   app_net:
    driver: bridge
    ipam:
     config:
       - subnet: 192.168.1.0/24
+
